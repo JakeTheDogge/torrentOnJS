@@ -1,0 +1,10 @@
+{
+    "name": "torrent",
+    "version": "1.0.0",
+    "description": "Torrent client",
+    "main": "index.js",
+    "author": "dude_ksusha",
+    "dependencies": {
+        "bencode": "^2.0.1"
+    }
+}
