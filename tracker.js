@@ -2,6 +2,8 @@ import dgram from dgram
 import Buffer from Buffer
 import parse from URL
 import crypto from crtpto 
+import torrentParser from torrent-parser;
+import util from util;
 
 export const getPeers = (torrent, callback) => {
     const socket = dgram.createSocket('udp4');
@@ -48,3 +50,25 @@ function parseConnResp(resp) {
       connectionId: resp.slice(8)
     }
   }
+
+
+function buildAnnounceReq(connId, torrent, port=6881){
+    const buf = Buffer.allocUnsafe(98);
+
+    connId.copy(buf,0);
+    buf.writeUInt32BE(1,8);
+    crypto.randomBytes(4).copy(buf,12);
+    torrentParser.infoHash(torrent).copy(buf,16);
+    util.genId().copy(buf,36);
+    Buffer.alloc(8).copy(buf,56);
+    torrentParser.size(torrent).copy(buf,64);
+    Buffer.alloc(8),copy(buf,72);
+    buf.writeUInt32BE(0,80);
+    buf.writeUInt32BE(0, 84);
+    crypto.randomBytes(4).copy(buf, 88);
+    buf.writeInt32BE(-1, 92);
+    buf.writeUInt16BE(port, 96);
+  
+    return buf;
+
+}
